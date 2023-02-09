@@ -1,0 +1,37 @@
+name: 'Apt-Cache'
+description: Cache Apt Packages
+author: Eeems
+inputs:
+  packages:
+    description: List of packages to install and cache
+    required: true
+  path:
+    description: Location to cache deb files
+    required: false
+    default: .aptcache
+runs:
+  using: composite
+  steps:
+    - name: Setup Apt for caching
+      shell: bash
+      run: |
+        sudo apt-get update -yq
+        aptHash(){ echo "$1-$(apt-cache policy "$1" | grep -oP '(?<=Candidate:\s)(.+)')"; }
+        echo "packagesHash=$(echo "${{ inputs.packages }}" | xargs -rn1 | tr '\n' '-'  | md5sum | cut -f 1 -d ' ')" >> $GITHUB_ENV
+    - name: Cache deb files
+      uses: actions/cache@v3
+      with:
+        path: .aptcache
+        key: apt-cache-${{ env.packagesHash }}
+        restore-keys: |
+          apt-cache-
+    - name: Restore deb files from cache
+      shell: bash
+      run: |
+        sudo apt-get clean -yq
+        if compgen -G "${{ inputs.path }}/*.deb" > /dev/null; then
+          sudo cp ${{ inputs.path }}/*.deb /var/cache/apt/archives
+        fi
+        sudo apt-get install -yq ${{ inputs.packages }}
+        mkdir -p ${{ inputs.path }}
+        sudo cp /var/cache/apt/archives/*.deb ${{ inputs.path }}

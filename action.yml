@@ -1,4 +1,4 @@
-name: 'Apt-Cache'
+name: 'Apt-Cache-Action'
 description: Cache Apt Packages
 author: Eeems
 inputs:

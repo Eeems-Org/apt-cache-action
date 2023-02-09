@@ -1,6 +1,7 @@
 name: 'Apt-Cache-Action'
 description: Cache Apt Packages
 author: Eeems
+icon: archive
 inputs:
   packages:
     description: List of packages to install and cache

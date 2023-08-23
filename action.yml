@@ -33,8 +33,8 @@ runs:
       run: |
         sudo apt-get clean -yq
         if compgen -G "${{ inputs.path }}/*.deb" > /dev/null; then
-          sudo cp ${{ inputs.path }}/*.deb /var/cache/apt/archives
+          sudo cp -l ${{ inputs.path }}/*.deb /var/cache/apt/archives
         fi
         sudo apt-get install -yq ${{ inputs.packages }}
         mkdir -p ${{ inputs.path }}
-        sudo cp /var/cache/apt/archives/*.deb ${{ inputs.path }}
+        sudo cp -l /var/cache/apt/archives/*.deb ${{ inputs.path }}

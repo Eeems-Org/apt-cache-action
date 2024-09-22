@@ -24,7 +24,7 @@ runs:
     - name: Cache deb files
       uses: actions/cache@v4
       with:
-        path: .aptcache
+        path: ${{ inputs.path }}
         key: apt-cache-${{ env.packagesHash }}
         restore-keys: |
           apt-cache-

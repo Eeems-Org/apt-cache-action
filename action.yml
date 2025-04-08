@@ -20,7 +20,9 @@ runs:
       run: |
         sudo apt-get update -yq
         aptHash(){ echo "$1-$(apt-cache policy "$1" | grep -oP '(?<=Candidate:\s)(.+)')"; }
-        echo "packagesHash=$(echo "${{ inputs.packages }}" | xargs -rn1 | tr '\n' '-'  | md5sum | cut -f 1 -d ' ')" >> $GITHUB_ENV
+        export -f aptHash
+        hash=$(echo "${{ inputs.packages }}" | xargs -rI {} bash -c 'aptHash {}' | tr '\n' '-')
+        echo "packagesHash=${hash%-}" >> $GITHUB_ENV
     - name: Cache deb files
       uses: actions/cache@v4
       with:

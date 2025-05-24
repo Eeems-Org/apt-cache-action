@@ -11,7 +11,7 @@ Install and cache packages with apt
 
 ```yaml
 - name: Install texlive Apt dependencies
-  uses: Eeems-Org/apt-cache-action
+  uses: Eeems-Org/apt-cache-action@v1
   with:
     packages: texlive-base texlive-latex-extra
 ```

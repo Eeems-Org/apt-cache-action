@@ -24,7 +24,7 @@ runs:
         hash=$(echo "${{ inputs.packages }}" | xargs -rI {} bash -c 'aptHash {}' | tr '\n' '-' | md5sum | cut -f 1 -d ' ')
         echo "packagesHash=${hash}" >> $GITHUB_ENV
     - name: Cache deb files
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ inputs.path }}
         key: apt-cache-${{ env.packagesHash }}
